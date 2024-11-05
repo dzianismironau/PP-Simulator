@@ -6,12 +6,12 @@ public abstract class Creature
     public string Name
     {
         get => _name; set
-        {   
+        {
             if (_name != "Unknown") return;
             _name = value?.Trim() ?? "Unknown";
 
             if (_name.Length < 3)
-            _name = _name.PadRight(3, '#');
+                _name = _name.PadRight(3, '#');
 
             if (_name.Length > 25)
             {
@@ -20,7 +20,7 @@ public abstract class Creature
             }
 
             if (char.IsLower(_name[0]))
-            _name = char.ToUpper(_name[0]) + _name.Substring(1);
+                _name = char.ToUpper(_name[0]) + _name.Substring(1);
         }
     }
     public int Level
@@ -41,7 +41,7 @@ public abstract class Creature
     { }
     public abstract void SayHi();
     public abstract int Power { get; }
-    public string Info => $"{Name} [{Level}]";
+    public abstract string Info { get; }
     public void Upgrade()
     {
         if (Level < 10) Level++;
@@ -61,6 +61,10 @@ public abstract class Creature
     public void Go(string directions)
     {
         Go(DirectionParser.Parse(directions));
+    }
+    public override string ToString()
+    {
+        return $"{GetType().Name.ToUpper()}: {Info}";
     }
 }
 
