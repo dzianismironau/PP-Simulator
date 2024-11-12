@@ -8,7 +8,8 @@ public class Elf : Creature
     private int _singCount;
     public int Agility
     {
-        get => _agility; set
+        get => _agility; 
+        private set
         {
             if (value < 0)
                 _agility = 0;

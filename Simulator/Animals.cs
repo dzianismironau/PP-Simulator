@@ -3,10 +3,10 @@
     public class Animals
     {
     private string _description = "Unknown";
-    public string Description 
+    public required string Description 
     { 
         get=> _description;
-        set
+        init
         {
             _description = value?.Trim() ?? "Unknown";
             if (_description.Length < 3) 
