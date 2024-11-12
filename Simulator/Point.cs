@@ -53,7 +53,7 @@ public readonly struct Point
         }
         else
         {
-            throw new Exception("Nie ma takiego kierunku");
+            throw new Exception("No such directory");
         }
     }
 }
