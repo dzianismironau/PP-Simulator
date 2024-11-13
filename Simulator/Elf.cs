@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 namespace Simulator;
 
 public class Elf : Creature
@@ -33,8 +34,7 @@ public class Elf : Creature
     {
         Agility = agility;
     }
-    public override void SayHi() => Console.WriteLine(
-    $"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}.");
+    public override string Greeting() => $"Hi, I'm {Name}, my level is {Level}, my rage is {Agility}.";
     public override string Info
     {
         get => $"{Name} [{Level}][{Agility}]";

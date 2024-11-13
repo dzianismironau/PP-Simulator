@@ -39,29 +39,25 @@ public abstract class Creature
     }
     public Creature()
     { }
-    public abstract void SayHi();
+    public abstract string Greeting();
     public abstract int Power { get; }
     public abstract string Info { get; }
     public void Upgrade()
     {
         if (Level < 10) Level++;
     }
-    public void Go(Direction direction)
-    {
-        Console.WriteLine($"{Name} goes {direction.ToString().ToLower()}");
-    }
+    public string Go(Direction direction) => $"{direction.ToString().ToLower()}";
 
-    public void Go(Direction[] directions)
+    public string[] Go(Direction[] directions)
     {
+        var result = new string[directions.Length];
         for (int i = 0; i < directions.Length; i++)
         {
-            Go(directions[i]);
+           result[i] = Go(directions[i]);
         }
+        return result;
     }
-    public void Go(string directions)
-    {
-        Go(DirectionParser.Parse(directions));
-    }
+    public string[] Go(string directions) => Go(DirectionParser.Parse(directions));
     public override string ToString()
     {
         return $"{GetType().Name.ToUpper()}: {Info}";
