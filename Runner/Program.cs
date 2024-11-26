@@ -6,8 +6,11 @@ public class Program
     public static void Main(string[] args)
     {
         Console.WriteLine("Starting Simulator!\n");
+
         Lab7();
+
     }
+
     static void Lab7()
     {
         var squareMap = new SmallSquareMap(5);
@@ -19,7 +22,7 @@ public class Program
 
         elf.InitMapAndPosition(squareMap, new Point(4, 4));
         elf2.InitMapAndPosition(squareMap, new Point(3, 3));
-        elf2.InitMapAndPosition(torusMap, new Point(3, 3));
+        //elf2.InitMapAndPosition(torusMap, new Point(3, 3));
         orc.InitMapAndPosition(torusMap, new Point(0, 0));
 
         Console.WriteLine($"Initial Position on Square Map (Elf): {elf.Position}");
@@ -50,7 +53,5 @@ public class Program
         var torusCreatures2 = torusMap.At(1, 4);
         Console.WriteLine($"Number of creatures at (1, 4) on Torus Map: {torusCreatures2?.Count ?? 0}");
     }
+
 }
-
-
-

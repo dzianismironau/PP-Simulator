@@ -21,11 +21,9 @@ public class SmallTorusMapTests
     [InlineData(4)]
     [InlineData(21)]
     public void
-        Constructor_InvalidSize_ShouldThrowArgumentOutOfRangeException
-        (int size)
+        Constructor_InvalidSize_ShouldThrowArgumentOutOfRangeException(int size)
     {
         // Act & Assert
-        // The way to check if method throws anticipated exception:
         Assert.Throws<ArgumentOutOfRangeException>(() =>
              new SmallTorusMap(size, size));
     }

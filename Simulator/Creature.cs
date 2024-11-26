@@ -1,7 +1,6 @@
 ﻿using Simulator.Maps;
 
 namespace Simulator;
-
 public abstract class Creature
 {
     public Map? Map { get; private set; }
@@ -17,6 +16,7 @@ public abstract class Creature
         set
         {   
             if (_name != "Unknown") return;
+
             _name = value?.Trim() ?? "Unknown";
 
             if (_name.Length < 3)
@@ -44,13 +44,16 @@ public abstract class Creature
             else if (value > 10)
                 _level = 10;
             else _level = value;
+
         }
     }
+
     public Creature(string name, int level = 1)
     {
         Name = name;
         Level = level;
     }
+
     public Creature()
     { }
 
@@ -68,6 +71,7 @@ public abstract class Creature
         if (Level < 10)
             Level++;
     }
+
     public void InitMapAndPosition(Map map, Point position)
     {
         if (map == null)
@@ -86,6 +90,7 @@ public abstract class Creature
         Position = position;
         map.Add(this, position);
     }
+
     public string Go(Direction direction)
     {
         if (Map == null)
@@ -102,4 +107,5 @@ public abstract class Creature
     {
         return $"{GetType().Name.ToUpper()}: {Info}";
     }
+
 }

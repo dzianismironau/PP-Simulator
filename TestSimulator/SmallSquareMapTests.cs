@@ -8,13 +8,14 @@ public class SmallSquareMapTests
     [Fact]
     public void Constructor_ValidSize_ShouldSetSize()
     {
-        // Arrange 
+        // Arrange
         int size = 10;
-        // Act 
+        // Act
         var map = new SmallSquareMap(size);
-        // Assert 
+        // Assert
         Assert.Equal(size, map.SizeX);
         Assert.Equal(size, map.SizeY);
+
     }
 
     [Theory]
@@ -24,7 +25,7 @@ public class SmallSquareMapTests
         Constructor_InvalidSize_ShouldThrowArgumentOutOfRangeException
         (int size)
     {
-        // Act & Assert 
+        // Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() =>
              new SmallSquareMap(size));
     }
@@ -37,12 +38,12 @@ public class SmallSquareMapTests
     public void Exist_ShouldReturnCorrectValue(int x, int y,
         int size, bool expected)
     {
-        // Arrange 
+        // Arrange
         var map = new SmallSquareMap(size);
         var point = new Point(x, y);
-        // Act 
+        // Act
         var result = map.Exist(point);
-        // Assert 
+        // Assert
         Assert.Equal(expected, result);
     }
 
@@ -54,12 +55,12 @@ public class SmallSquareMapTests
     public void Next_ShouldReturnCorrectNextPoint(int x, int y,
         Direction direction, int expectedX, int expectedY)
     {
-        // Arrange 
+        // Arrange
         var map = new SmallSquareMap(20);
         var point = new Point(x, y);
-        // Act 
+        // Act
         var nextPoint = map.Next(point, direction);
-        // Assert 
+        // Assert
         Assert.Equal(new Point(expectedX, expectedY), nextPoint);
     }
 
@@ -71,12 +72,12 @@ public class SmallSquareMapTests
     public void Next_ShouldReturnTheSamePoint(int x, int y,
         Direction direction, int expectedX, int expectedY)
     {
-        // Arrange 
+        // Arrange
         var map = new SmallSquareMap(5);
         var point = new Point(x, y);
-        // Act 
+        // Act
         var nextPoint = map.Next(point, direction);
-        // Assert 
+        // Assert
         Assert.Equal(new Point(expectedX, expectedY), nextPoint);
     }
 
@@ -88,12 +89,12 @@ public class SmallSquareMapTests
     public void NextDiagonal_ShouldReturnCorrectNextPoint(int x, int y,
         Direction direction, int expectedX, int expectedY)
     {
-        // Arrange 
+        // Arrange
         var map = new SmallSquareMap(20);
         var point = new Point(x, y);
-        // Act 
+        // Act
         var nextPoint = map.NextDiagonal(point, direction);
-        // Assert 
+        // Assert
         Assert.Equal(new Point(expectedX, expectedY), nextPoint);
     }
 
@@ -105,12 +106,12 @@ public class SmallSquareMapTests
     public void NextDiagonal_ShouldReturnTheSamePoint(int x, int y,
         Direction direction, int expectedX, int expectedY)
     {
-        // Arrange 
+        // Arrange
         var map = new SmallSquareMap(5);
         var point = new Point(x, y);
-        // Act 
+        // Act
         var nextPoint = map.Next(point, direction);
-        // Assert 
+        // Assert
         Assert.Equal(new Point(expectedX, expectedY), nextPoint);
     }
 }
