@@ -9,7 +9,7 @@ internal class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
         SmallSquareMap map = new(5);
-        List<Creature> creatures = [new Orc("Gorbag"), new Elf("Elandor")];
+        List<IMappable> creatures = [new Orc("Gorbag"), new Elf("Elandor")];
         List<Point> points = [new(2, 2), new(3, 1)];
         string moves = "dlrludl";
 
@@ -26,7 +26,7 @@ internal class Program
             Console.WriteLine("Press any key to continue:");
             ConsoleKeyInfo keyInfo = Console.ReadKey(intercept: true);
             Console.WriteLine($"Turn {turn}");
-            Console.WriteLine($"{simulation.CurrentCreature.Info} {simulation.CurrentCreature.Position} moves {simulation.CurrentMoveName}");
+            Console.WriteLine($"{(object)simulation.CurrentMappable} {(object)simulation.CurrentMappable} moves {simulation.CurrentMoveName}");
             if (keyInfo.Key != ConsoleKey.Escape)
             {
                 simulation.Turn();

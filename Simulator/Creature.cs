@@ -1,7 +1,7 @@
 ﻿using Simulator.Maps;
 
 namespace Simulator;
-public abstract class Creature
+public abstract class Creature : IMappable
 {
     public Map? Map { get; private set; }
     public Point Position { get; private set; }
@@ -107,5 +107,4 @@ public abstract class Creature
     {
         return $"{GetType().Name.ToUpper()}: {Info}";
     }
-
 }
