@@ -4,11 +4,6 @@ public class SmallTorusMap : SmallMap
 {
     public SmallTorusMap(int sizeX, int sizeY) : base(sizeX, sizeY) { }
 
-    public override List<IMappable>? At(int x, int y)
-    {
-        throw new NotImplementedException();
-    }
-
     public override Point Next(Point p, Direction d)
     {
         Point nextPoint = p.Next(d);
