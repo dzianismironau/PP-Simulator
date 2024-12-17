@@ -1,9 +1,5 @@
 ﻿using Simulator.Maps;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-namespace Simulator;
+using Simulator;
 
 public class MapVisualizer
 {
@@ -16,7 +12,8 @@ public class MapVisualizer
 
     public void Draw()
     {
-        Console.OutputEncoding = Encoding.UTF8;
+        Console.OutputEncoding = System.Text.Encoding.UTF8;
+
         Console.Write(Box.TopLeft);
         for (int x = 0; x < _map.SizeX - 1; x++)
         {
@@ -44,9 +41,11 @@ public class MapVisualizer
                 {
                     Console.Write(" ");
                 }
+
                 Console.Write(Box.Vertical);
             }
             Console.WriteLine();
+
             if (y > 0)
             {
                 Console.Write(Box.MidLeft);
@@ -57,12 +56,14 @@ public class MapVisualizer
                 Console.WriteLine($"{Box.Horizontal}{Box.MidRight}");
             }
         }
+
         Console.Write(Box.BottomLeft);
         for (int x = 0; x < _map.SizeX - 1; x++)
         {
             Console.Write($"{Box.Horizontal}{Box.BottomMid}");
         }
         Console.WriteLine($"{Box.Horizontal}{Box.BottomRight}");
+
         Console.WriteLine();
     }
 }

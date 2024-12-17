@@ -1,122 +1,123 @@
 ﻿using Simulator.Maps;
 
-namespace Simulator;
-
-public class Simulation
+namespace Simulator
 {
-    /// <summary>
-    /// Simulation's map.
-    /// </summary>
-    public Map Map { get; }
-
-    /// <summary>
-    /// IMappables moving on the map.
-    /// </summary>
-    public List<IMappable> Mappables { get; }
-
-    /// <summary>
-    /// Starting positions of mappables.
-    /// </summary>
-    public List<Point> Positions { get; }
-
-    /// <summary>
-    /// Cyclic list of mappables moves. 
-    /// Bad moves are ignored - use DirectionParser.
-    /// First move is for first mappable, second for second and so on.
-    /// When all mappables make moves, 
-    /// next move is again for first mappable and so on.
-    /// </summary>
-    public string Moves { get; }
-
-    /// <summary>
-    /// Has all moves been done?
-    /// </summary>
-    public bool Finished = false;
-
-    /// <summary>
-    /// Current turn counter.
-    /// </summary>
-    private int _counter = 0;
-
-    /// <summary>
-    /// Valid moves chars.
-    /// </summary>
-    private HashSet<char> validMoves = new HashSet<char> { 'l', 'r', 'u', 'd' };
-
-    /// <summary>
-    /// IMappable which will be moving current turn.
-    /// </summary>
-    public IMappable CurrentMappable
+    public class Simulation
     {
-        get => Mappables[_counter % Mappables.Count];
-    }
+        /// <summary>
+        /// Simulation's map.
+        /// </summary>
+        public Map Map { get; }
 
-    /// <summary>
-    /// Lowercase name of direction which will be used in current turn.
-    /// </summary>
-    public string CurrentMoveName
-    {
-        get
+        /// <summary>
+        /// Creatures moving on the map.
+        /// </summary>
+        public List<IMappable> Mappables { get; }
+
+        /// <summary>
+        /// Starting positions of creatures.
+        /// </summary>
+        public List<Point> Positions { get; }
+
+        /// <summary>
+        /// Cyclic list of creatures moves. 
+        /// Bad moves are ignored - use DirectionParser.
+        /// First move is for first creature, second for second and so on.
+        /// When all creatures make moves, 
+        /// next move is again for first creature and so on.
+        /// </summary>
+        public string Moves { get; }
+
+        /// <summary>
+        /// Has all moves been done?
+        /// </summary>
+        public bool Finished = false;
+
+        public int _index = 0;
+
+        /// <summary>
+        /// Creature which will be moving current turn.
+        /// </summary>
+        public IMappable CurrentMappable
         {
-            var direction = DirectionParser.Parse(Moves[_counter % Moves.Length].ToString());
-            if (direction.Any())
+            get => Mappables[_index % Mappables.Count];
+        }
+
+        /// <summary>
+        /// Lowercase name of direction which will be used in current turn.
+        /// </summary>
+        public string CurrentMoveName
+        {
+            get => Moves[_index % Moves.Length].ToString().ToLower();
+        }
+
+        /// <summary>
+        /// Simulation constructor.
+        /// Throws errors if:
+        /// - creatures' list is empty
+        /// - number of creatures differs from number of starting positions
+        /// - moves string is null or empty
+        /// </summary>
+        public Simulation(Map map, List<IMappable> mappables,
+            List<Point> positions, string moves)
+        {
+            if (mappables == null || mappables.Count == 0)
             {
-                return direction[0].ToString().ToLower();
+                throw new ArgumentException("Creature list cannot be empty.");
             }
-            return string.Empty;
+
+            if (positions == null || positions.Count != mappables.Count)
+            {
+                throw new ArgumentException("The number of initial positions does not match the number of creatures.");
+            }
+
+            if (string.IsNullOrEmpty(moves))
+            {
+                throw new ArgumentException("Moves string cannot be empty or null.");
+            }
+
+            Map = map ?? throw new ArgumentNullException(nameof(map));
+            Mappables = mappables;
+            Positions = positions;
+            Moves = moves;
+
+            for (int i = 0; i < Mappables.Count; i++)
+            {
+                mappables[i].InitMapAndPosition(map, positions[i]);
+            }
+        }
+
+        /// <summary>
+        /// Makes one move of current creature in current direction.
+        /// Throws an error if simulation is finished.
+        /// </summary>
+        public void Turn()
+        {
+            if (Finished)
+            {
+                throw new InvalidOperationException("Simulation is already finished.");
+            }
+
+            char moveChar = Moves[_index % Moves.Length];
+
+            Direction direction;
+            try
+            {
+                direction = DirectionParser.Parse(moveChar.ToString())[0];
+            }
+            catch (Exception)
+            {
+                throw new InvalidOperationException($"Invalid move character: '{moveChar}'. Valid moves: 'U', 'D', 'L', 'R'.");
+            }
+
+
+            CurrentMappable.Go(direction);
+            _index++;
+
+            if (_index >= Moves.Length)
+            {
+                Finished = true;
+            }
         }
     }
-
-    /// <summary>
-    /// Simulation constructor.
-    /// Throw errors:
-    /// if mappables' list is empty,
-    /// if number of mappables differs from 
-    /// number of starting positions.
-    /// </summary>
-    public Simulation(Map map, List<IMappable> mappables,
-        List<Point> positions, string moves)
-    {
-        if (mappables == null || mappables.Count == 0)
-        {
-            throw new ArgumentException("IMappables list cannot be empty.");
-        }
-        if (positions == null || positions.Count != mappables.Count)
-        {
-            throw new ArgumentException("Positions count does not match the number of mappables.");
-        }
-        if (string.IsNullOrWhiteSpace(moves))
-        {
-            throw new ArgumentException("Moves string cannot be empty or null.");
-        }
-        Map = map ?? throw new ArgumentNullException(nameof(map));
-        Mappables = mappables;
-        Positions = positions;
-        Moves = ValidateMoves(moves);
-        for (int i = 0; i < mappables.Count; i++)
-        {
-            mappables[i].InitMapAndPosition(map, positions[i]);
-        }
-    }
-
-    /// <summary>
-    /// Makes one move of current mappable in current direction.
-    /// Throw error if simulation is finished.
-    /// </summary>
-    public void Turn()
-    {
-        if (Finished)
-        {
-            throw new InvalidOperationException("Simulation is already finished.");
-        }
-        var direction = DirectionParser.Parse(Moves[_counter % Moves.Length].ToString())[0];
-        CurrentMappable.Go(direction);
-        _counter++;
-        if (_counter >= Moves.Length) Finished = true;
-    }
-
-    /// <summary>
-    /// Validates moves input.
-    /// </summary>
-    private string ValidateMoves(string moves) => new (moves.Where(c => validMoves.Contains(Char.ToLower(c))).ToArray());
 }

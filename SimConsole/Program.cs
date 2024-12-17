@@ -1,43 +1,55 @@
-﻿using System.Text;
+﻿using Simulator;
 using Simulator.Maps;
-using Simulator;
+using System.Collections.Generic;
 
-namespace SimConsole;
-internal class Program
+namespace SimConsole
 {
-    static void Main(string[] args)
+    internal class Program
     {
-        Console.OutputEncoding = Encoding.UTF8;
-        SmallSquareMap map = new(5);
-        List<IMappable> creatures = [new Orc("Gorbag"), new Elf("Elandor")];
-        List<Point> points = [new(2, 2), new(3, 1)];
-        string moves = "dlrludl";
-
-        Simulation simulation = new Simulation(map, creatures, points, moves);
-        MapVisualizer mapVisualizer = new MapVisualizer(map);
-
-        Console.WriteLine("Simulation!");
-        Console.WriteLine();
-        Console.WriteLine("Starting positions:");
-        mapVisualizer.Draw();
-        int turn = 1;
-        while (!simulation.Finished)
+        static void Main(string[] args)
         {
-            Console.WriteLine("Press any key to continue:");
-            ConsoleKeyInfo keyInfo = Console.ReadKey(intercept: true);
-            Console.WriteLine($"Turn {turn}");
-            Console.WriteLine($"{(object)simulation.CurrentMappable} {(object)simulation.CurrentMappable} moves {simulation.CurrentMoveName}");
-            if (keyInfo.Key != ConsoleKey.Escape)
+            Console.OutputEncoding = System.Text.Encoding.UTF8;
+
+            Map map = new BigBounceMap(8, 6);
+
+            List<IMappable> creatures = new List<IMappable>
             {
+                new Elf("Elandor"),
+                new Orc("Gorbag"),
+                new Animals { Description = "Rabbit", Size = 3 },
+                new Birds { Description = "Eagle", Size = 2, CanFly = true  },
+                new Birds { Description = "Ostrich", Size = 5, CanFly = false },
+            };
+
+
+            List<Point> positions = new List<Point>
+            {
+                new Point(2, 2),
+                new Point(3, 1),
+                new Point(4, 1),
+                new Point(1, 3),
+                new Point(6, 4),
+            };
+
+            string moves = "udlrudlrudlrudlrudlr";
+
+            var simulation = new Simulation(map, creatures, positions, moves);
+
+            while (!simulation.Finished)
+            {
+                Console.Clear();
+                Console.WriteLine("SIMULATION!");
+                Console.WriteLine($"Turn {simulation._index + 1}");
+
                 simulation.Turn();
+
+                var mapVisualizer = new MapVisualizer(map);
                 mapVisualizer.Draw();
-                turn++;
+
+                System.Threading.Thread.Sleep(500);
             }
-            else
-            {
-                Console.WriteLine("Exiting...");
-                break;
-            }
+
+            Console.WriteLine("Simulation finished!");
         }
     }
 }
