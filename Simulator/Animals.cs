@@ -1,32 +1,75 @@
-﻿namespace Simulator;
+﻿using Simulator;
+using Simulator.Maps;
 
-    public class Animals
-    {
+public class Animals : IMappable
+{
+    public Map? Map { get; private set; }
+    public Point Position { get; protected set; }
+    public virtual char Symbol => 'A';
+
+    public uint Size { get; set; } = 3;
     private string _description = "Unknown";
-    public required string Description 
-    { 
-        get=> _description;
+    public required string Description
+
+    {
+        get { return _description; }
         init
         {
-            _description = value?.Trim() ?? "Unknown";
-            if (_description.Length < 3) 
-                _description = _description.PadRight(3, '#');
-
-            if (_description.Length > 15)
+            if (value == null)
             {
-                _description = _description.Substring(0, 15).TrimEnd();
-                if (_description.Length < 3)
-                    _description = _description.PadRight(3, '#');
+                _description = "Unknown";
+                return;
             }
-            if (char.IsLower(_description[0]))
-                _description = char.ToUpper(_description[0]) + _description.Substring(1);
+
+            value = value.Trim();
+            if (value.Length < 3)
+                value = value.PadRight(3, '#');
+
+            if (value.Length > 15)
+                value = value.Substring(0, 15).TrimEnd();
+
+            if (char.IsLower(value[0]))
+                value = char.ToUpper(value[0]) + value.Substring(1); ;
+
+
+            _description = value;
         }
     }
 
-    public uint Size { get; set; } = 3;
-    public virtual string Info => $"{Description} <{Size}>";
-    public override string ToString()
+
+    //public string Info
+    //{
+    //    get
+    //    {
+    //        return Description + " <" + Size + ">";
+    //    }
+    //}
+
+    public virtual string Info => $"{Description} <{Size}>"; //np. Dogs <3>
+
+    public virtual void Go(Direction direction)
     {
-        return $"{GetType().Name.ToUpper()}: {Info}";
+        if (Map == null) throw new InvalidOperationException("Animal cannot move since it's not on the map!");
+        var newPosition = GetNewPosition(direction);
+
+        Map.Move(this, Position, newPosition);
+        Position = newPosition;
     }
+
+    public virtual void InitMapAndPosition(Map map, Point point)
+    {
+        if (map == null) throw new ArgumentNullException(nameof(map));
+        if (Map != null) throw new InvalidOperationException("This animal is already on a map.");
+        if (!map.Exist(point)) throw new ArgumentException("Non-existing position for this map.");
+        Map = map;
+        Position = point;
+        map.Add(this, point);
+    }
+
+    protected virtual Point GetNewPosition(Direction direction)
+    {
+        return Map.Next(Position, direction);
+    }
+    public override string ToString() => $"{GetType().Name.ToUpper()}: {Info}";
+
 }

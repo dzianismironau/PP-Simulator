@@ -3,16 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-
 namespace Simulator;
+
 public class MapVisualizer
 {
     private readonly Map _map;
+
     public MapVisualizer(Map map)
     {
         _map = map;
     }
+
     public void Draw()
     {
         Console.OutputEncoding = Encoding.UTF8;
@@ -22,20 +23,22 @@ public class MapVisualizer
             Console.Write($"{Box.Horizontal}{Box.TopMid}");
         }
         Console.WriteLine($"{Box.Horizontal}{Box.TopRight}");
+
         for (int y = _map.SizeY - 1; y >= 0; y--)
         {
             Console.Write(Box.Vertical);
             for (int x = 0; x < _map.SizeX; x++)
             {
                 var creatures = _map.At(x, y);
+
                 if (creatures != null && creatures.Count > 1)
                 {
                     Console.Write("X");
                 }
-                else if (creatures != null && creatures.Count == 1)
+                else if (creatures?.Count == 1)
                 {
                     var creature = creatures.First();
-                    Console.Write(creature is Orc ? "O" : "E");
+                    Console.Write(creature.Symbol);
                 }
                 else
                 {
@@ -61,6 +64,5 @@ public class MapVisualizer
         }
         Console.WriteLine($"{Box.Horizontal}{Box.BottomRight}");
         Console.WriteLine();
-
     }
 }

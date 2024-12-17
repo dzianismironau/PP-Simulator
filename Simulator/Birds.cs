@@ -2,10 +2,13 @@
 
 internal class Birds : Animals
 {
+    public override char Symbol => CanFly ? 'B' : 'b';
     public bool CanFly { get; set; } = true;
+
     public Birds(string description, uint size, bool canFly) : base()
     {
-        Description = description; Size = size;
+        Description = description;
+        Size = size;
         CanFly = canFly;
     }
     public Birds() : base() { }
@@ -14,5 +17,8 @@ internal class Birds : Animals
     {
         return $"{GetType().Name.ToUpper()}: {Info}";
     }
-}
 
+    protected override Point GetNewPosition(Direction direction) => CanFly
+            ? Map.Next(Map.Next(Position, direction), direction)
+            : Map.NextDiagonal(Position, direction);
+}
