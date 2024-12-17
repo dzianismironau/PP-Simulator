@@ -1,15 +1,32 @@
 ﻿namespace Simulator.Maps;
+
 public class SmallTorusMap : SmallMap
 {
     public SmallTorusMap(int sizeX, int sizeY) : base(sizeX, sizeY) { }
-    public override Point Next(Point p, Direction d) 
+
+    public override List<IMappable>? At(int x, int y)
     {
-        var nextPoint = p.Next(d);
-        return new Point((nextPoint.X + SizeX) % SizeX, (nextPoint.Y + SizeY) % SizeY);
+        throw new NotImplementedException();
     }
+
+    public override Point Next(Point p, Direction d)
+    {
+        Point nextPoint = p.Next(d);
+
+        int newX = (nextPoint.X + SizeX) % SizeX;
+        int newY = (nextPoint.Y + SizeY) % SizeY;
+
+        return new Point(newX, newY);
+    }
+
     public override Point NextDiagonal(Point p, Direction d)
     {
-        var nextDiagonalPoint = p.NextDiagonal(d);
-        return new Point((nextDiagonalPoint.X + SizeX) % SizeX, (nextDiagonalPoint.Y + SizeY) % SizeY);
+        Point nextDiagonalPoint = p.NextDiagonal(d);
+
+        int newX = (nextDiagonalPoint.X + SizeX) % SizeX;
+        int newY = (nextDiagonalPoint.Y + SizeY) % SizeY;
+
+        return new Point(newX, newY);
     }
+
 }

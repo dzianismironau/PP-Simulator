@@ -79,7 +79,7 @@ public abstract class Map
         return _fields.ContainsKey(position) ? _fields[position] : null;
     }
 
-    public abstract List<IMappable>? At(int x, int y);
+    public List<IMappable>? At(int x, int y) => At(new Point(x, y));
     /// <summary>
     /// Check if give point belongs to the map.
     /// </summary>

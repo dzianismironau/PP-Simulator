@@ -32,49 +32,17 @@ internal class Program
 
         string moves = "udlrudlrudlrudlrudlr";
 
-        try
-        {
-            var simulation = new Simulation(map, creatures, positions, moves);
 
-            var simulationHistory = new SimulationHistory(simulation);
+        Simulation simulation = new Simulation(map, creatures, positions, moves);
+        MapVisualizer mapVisualizer = new MapVisualizer(map);
 
-            while (!simulation.Finished)
-            {
-                Console.Clear();
-                Console.WriteLine("SIMULATION!");
-                Console.WriteLine($"Turn {simulation._index + 1}");
+        Console.WriteLine("SIMULATION!");
+        Console.WriteLine();
+        Console.WriteLine("Starting positions:");
 
-                simulation.Turn();
+        mapVisualizer.Draw();
 
-                var mapVisualizer = new MapVisualizer(map);
-                mapVisualizer.Draw();
 
-                System.Threading.Thread.Sleep(500);
-            }
 
-            Console.WriteLine("Simulation finished!");
-            Console.WriteLine("\n=== Simulation History ===");
-            int[] turnsToShow = { 5, 10, 15, 20 };
-
-            foreach (var turn in turnsToShow)
-            {
-                if (turn - 1 < simulationHistory.TotalTurns)
-                {
-                    Console.WriteLine($"\nTurn {turn}:");
-                    var snapshot = simulationHistory.GetSnapshot(turn - 1);
-
-                    var mapVisualizer = new MapVisualizer(map);
-                    mapVisualizer.DrawSnapshot(snapshot);
-                }
-                else
-                {
-                    Console.WriteLine($"\nTurn {turn}: Not available (simulation finished earlier)");
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error: {ex.Message}");
-        }
     }
 }
